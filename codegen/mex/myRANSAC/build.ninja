@@ -1,0 +1,53 @@
+# CompilerName=msvc150
+# Mode=optim
+ninja_required_version = 1.3
+
+# Basic folders
+root = .
+builddir = $root\build\win64
+matlabdir = C:\MATLAB\R2019a
+startdir = C:\Users\IanAlferez\Documents\MATLAB\Examples\R2019a\driving\GroundPlaneAndObstacleDetectionUsingLidarExample
+
+# Toolchain information
+cc = cl
+cxx = cl
+linker = link
+linkerxx = link
+
+cflags =  /c /Zp8 /GR /W3 /EHs /nologo /MD /D_CRT_SECURE_NO_DEPRECATE /D_SCL_SECURE_NO_DEPRECATE /D_SECURE_SCL=0   /DMATLAB_MEX_FILE  /DMATLAB_MEX_FILE /O2 /Oy- /DNDEBUG /fp:strict /I "$root" /I "$startdir" /I "$root\interface" /I "$matlabdir\extern\include" /I "."   
+
+cxxflags =   /c /Zp8 /GR /W3 /EHs /nologo /MD /D_CRT_SECURE_NO_DEPRECATE /D_SCL_SECURE_NO_DEPRECATE /D_SECURE_SCL=0   /DMATLAB_MEX_FILE  /DMATLAB_MEX_FILE /O2 /Oy- /DNDEBUG /fp:strict /I "$root" /I "$startdir" /I "$root\interface" /I "$matlabdir\extern\include" /I "."   
+
+ldflags =  /nologo /manifest   /DLL /LIBPATH:"$matlabdir\extern\lib\win64\microsoft" libmx.lib libmex.lib libmat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  /out:"myRANSAC_mex.mexw64"  @myRANSAC_mex.arf
+
+# Build Rules
+rule cc
+    command = $cc $cflags $in /Fo$out
+
+rule cxx
+    command = $cxx $cxxflags $in /Fo$out
+
+rule link
+    command = $linker $in $ldflags
+
+rule linkxx
+    command = $linkerxx $in $ldflags
+
+# Build
+build $builddir\myRANSAC_data.obj : cc $root\myRANSAC_data.c
+build $builddir\myRANSAC_initialize.obj : cc $root\myRANSAC_initialize.c
+build $builddir\myRANSAC_terminate.obj : cc $root\myRANSAC_terminate.c
+build $builddir\myRANSAC.obj : cc $root\myRANSAC.c
+build $builddir\randi.obj : cc $root\randi.c
+build $builddir\rand.obj : cc $root\rand.c
+build $builddir\abs.obj : cc $root\abs.c
+build $builddir\sqrt.obj : cc $root\sqrt.c
+build $builddir\sum.obj : cc $root\sum.c
+build $builddir\_coder_myRANSAC_info.obj : cc $root\interface\_coder_myRANSAC_info.c
+build $builddir\_coder_myRANSAC_api.obj : cc $root\interface\_coder_myRANSAC_api.c
+build $builddir\_coder_myRANSAC_mex.obj : cc $root\interface\_coder_myRANSAC_mex.c
+build $builddir\myRANSAC_emxutil.obj : cc $root\myRANSAC_emxutil.c
+build $builddir\c_mexapi_version.obj : cc $matlabdir\extern\version\c_mexapi_version.c
+
+# Link
+build $root\myRANSAC_mex.mexw64 : link $builddir\myRANSAC_data.obj $builddir\myRANSAC_initialize.obj $builddir\myRANSAC_terminate.obj $builddir\myRANSAC.obj $builddir\randi.obj $builddir\rand.obj $builddir\abs.obj $builddir\sqrt.obj $builddir\sum.obj $builddir\_coder_myRANSAC_info.obj $builddir\_coder_myRANSAC_api.obj $builddir\_coder_myRANSAC_mex.obj $builddir\myRANSAC_emxutil.obj $builddir\c_mexapi_version.obj 
