@@ -4,4 +4,4 @@
 modified from https://www.mathworks.com/help/driving/examples/ground-plane-and-obstacle-detection-using-lidar.html
 
 ## Workflow
-<img src="markdownmonstericon.png">
+<img src="Workflow.png">
